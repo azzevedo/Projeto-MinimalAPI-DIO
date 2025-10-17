@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "dotnet: build"
+		},
+		{
+			"type": "dotnet",
+			"task": "build C:\\Users\\cad\\Downloads\\DIO\\Api\\minimal-api\\minimal-api.csproj",
+			"file": "C:\\Users\\cad\\Downloads\\DIO\\Api\\minimal-api\\minimal-api.csproj",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "dotnet: build C:\\Users\\cad\\Downloads\\DIO\\Api\\minimal-api\\minimal-api.csproj"
+		}
+	]
+}
