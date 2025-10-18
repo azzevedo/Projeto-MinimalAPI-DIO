@@ -87,17 +87,15 @@ builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
 builder.Services.AddDbContext<DbContexto>(
 	options =>
 	{
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-		string sql = builder.Configuration.GetConnectionString("mysql");
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+		var sql = builder.Configuration.GetConnectionString("mysql");
 
-#pragma warning disable CS8604 // Possible null reference argument.
-		_ = options.UseMySql(
+		if (string.IsNullOrEmpty(sql))
+			throw new InvalidOperationException("String mysql não configurada");
+
+		options.UseMySql(
 			builder.Configuration.GetConnectionString(sql),
-
 			ServerVersion.AutoDetect(sql)
 		);
-#pragma warning restore CS8604 // Possible null reference argument.
 	}
 );
 
