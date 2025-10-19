@@ -3,7 +3,7 @@ using minimal_api.Dominio.Entidades;
 
 namespace minimal_api.Infraestrutura.Db;
 
-public class DbContexto(DbContextOptions<DbContext> options) : DbContext(options)
+public class DbContexto(DbContextOptions<DbContexto> options) : DbContext(options)
 {
 	public DbSet<Administrador> Administradores { get; set; } = default!;
 	public DbSet<Veiculo> Veiculos { get; set; } = default!;

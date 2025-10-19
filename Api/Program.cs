@@ -84,20 +84,37 @@ builder.Services.AddSwaggerGen(
 builder.Services.AddScoped<IAdministradorServico, AdministradorServico>();
 builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
 
-builder.Services.AddDbContext<DbContexto>(
-	options =>
-	{
-		var sql = builder.Configuration.GetConnectionString("mysql");
+var environment = builder.Environment.EnvironmentName;
+if (environment == "Testing")
+{
+	builder.Services.AddDbContext<DbContexto>(
+		options =>
+		{
+			options.UseSqlite("DataSource=:memory:");
+		}
+	);
+}
+else
+{
+	// Configurar DbContexto para MySQL
+	builder.Services.AddDbContext<DbContexto>(
+		options =>
+		{
+			var sql = builder.Configuration.GetConnectionString("mysql");
 
-		if (string.IsNullOrEmpty(sql))
-			throw new InvalidOperationException("String mysql não configurada");
+			if (string.IsNullOrEmpty(sql))
+				throw new InvalidOperationException("String mysql não configurada");
 
-		options.UseMySql(
-			builder.Configuration.GetConnectionString(sql),
-			ServerVersion.AutoDetect(sql)
-		);
-	}
-);
+			// Pass the actual connection string value (sql) to UseMySql.
+			options.UseMySql(
+				sql,
+				ServerVersion.AutoDetect(sql)
+			);
+		}
+	);
+}
+
+
 
 var app = builder.Build();
 
