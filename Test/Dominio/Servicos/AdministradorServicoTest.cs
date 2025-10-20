@@ -179,6 +179,56 @@ public class AdministradorServicoTest
 		Assert.IsNull(admInexistente);
 	}
 
+	[TestMethod]
+	public void TestGetAdministradoresPaginado()
+	{
+		// Arrange
+		int pagina1 = 1;
+		int pagina2 = 2;
+		int pagina3 = 3;
+
+		// Act
+		var admsPagina1 = _servico.GetAdministradores(pagina1).Result;
+		var admsPagina2 = _servico.GetAdministradores(pagina2).Result;
+
+		// Assert
+		Assert.IsNotNull(admsPagina1);
+		Assert.IsTrue(admsPagina1.Count > 0); // Deve ter 4 admins na página 1
+		Assert.AreEqual(4, admsPagina1.Count);
+
+		Assert.IsNotNull(admsPagina2);
+		Assert.AreEqual(0, admsPagina2.Count); // Não deve ter admins na página 2 (só 4 cadastrados)
+
+		// Act2 Adicionar mais administradores para teste de paginação
+		AddAdministradoresParaTesteDePaginacao();
+		var admsPagina1AposInclusao = _servico.GetAdministradores(pagina1).Result;
+		var admsPagina2AposInclusao = _servico.GetAdministradores(pagina2).Result;
+		var admsPagina3AposInclusao = _servico.GetAdministradores(pagina3).Result;
+
+		// Assert2
+		Assert.IsNotNull(admsPagina1AposInclusao);
+		Assert.AreEqual(10, admsPagina1AposInclusao.Count); // Deve ter 10 admins na página 1
+		Assert.IsNotNull(admsPagina2AposInclusao);
+		Assert.AreEqual(7, admsPagina2AposInclusao.Count); // Deve ter 7 admins na página 2
+		Assert.IsNotNull(admsPagina3AposInclusao);
+		Assert.AreEqual(0, admsPagina3AposInclusao.Count); // Não deve ter admins na página 3
+	}
+
+	public void AddAdministradoresParaTesteDePaginacao()
+	{
+		for (int i = 0; i < 13; i++)
+		{
+			Administrador adm = new()
+			{
+				Email = $"teste{i}@teste.com",
+				Senha = "teste1234",
+				Perfil = "teste"
+			};
+			_context.Administradores.Add(adm);
+		}
+
+		_context.SaveChanges();
+	}
 
 	[TestCleanup]
 	public async Task Cleanup()
