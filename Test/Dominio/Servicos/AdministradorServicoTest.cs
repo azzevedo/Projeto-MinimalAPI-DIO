@@ -1,41 +1,23 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using minimal_api.Dominio.DTO;
 using minimal_api.Dominio.Entidades;
 using minimal_api.Dominio.Servicos;
-using minimal_api.Infraestrutura.Db;
-using Test.Infraestrutura.Db;
 
 namespace Test.Dominio.Servicos;
 
 [TestClass]
-public class AdministradorServicoTest
+public class AdministradorServicoTest : TestBase
 {
 	/// Contexto de teste em memória com dados pré-carregados <br/>
 	/// Herda de DbContexto
 	/// DbContextoTest _context = default!;
-	DbContexto _context = default!;
+	// DbContexto _context = default!;
 	AdministradorServico _servico = default!;
 
 	[TestInitialize]
 	public async Task Setup()
 	{
-		Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Testing");
-
-		var options = new DbContextOptionsBuilder<DbContexto>()
-			.UseSqlite("Filename=:memory:")
-			.Options;
-
-		// _context = new DbContexto(options);
-		/*
-		Criar como DbContextoTest para fazer override no OnModelCreating [HasData]
-		e popular o banco de dados de teste com dados pré-definidos.
-		Mas o _context precisa ser do tipo DbContexto para passar no construtor do AdministradorServico
-		*/
-		_context = new DbContextoTest(options);
-		await _context.Database.OpenConnectionAsync();
-		await _context.Database.EnsureCreatedAsync();
-
+		await CriarContextoEmMemoria();
 		_servico = new AdministradorServico(_context);
 	}
 
