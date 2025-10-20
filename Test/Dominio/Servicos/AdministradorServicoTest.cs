@@ -215,7 +215,6 @@ public class AdministradorServicoTest : TestBase
 	[TestCleanup]
 	public async Task Cleanup()
 	{
-		await _context.Database.CloseConnectionAsync();
-		await _context.DisposeAsync();
+		await FecharContextoEmMemoria();
 	}
 }
