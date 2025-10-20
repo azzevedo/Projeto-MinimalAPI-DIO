@@ -36,5 +36,11 @@ public abstract class TestBase
 		await _context.Database.OpenConnectionAsync();
 		await _context.Database.EnsureCreatedAsync();
 	}
+
+	protected async Task FecharContextoEmMemoria()
+	{
+		await _context.Database.CloseConnectionAsync();
+		await _context.DisposeAsync();
+	}
 }
 
