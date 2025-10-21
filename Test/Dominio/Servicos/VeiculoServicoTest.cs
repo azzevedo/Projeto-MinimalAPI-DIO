@@ -46,7 +46,6 @@ public class VeiculoServicoTest : TestBase
 		Assert.IsNull(veiculo);
 	}
 
-	// TODO
 	[TestMethod]
 	public async Task TestGetVeiculoById_Sucesso()
 	{
@@ -58,6 +57,50 @@ public class VeiculoServicoTest : TestBase
 
 		// Assert
 		Assert.IsNotNull(veiculo);
+	}
+
+	[TestMethod]
+	public async Task TestUpdateVeiculo_Sucesso()
+	{
+		// Arrange
+		await AddVeiculo(1);
+
+		var veiculo = await _servico.GetVeiculoById(1);
+
+		// Assert
+		Assert.IsNotNull(veiculo);
+
+		veiculo.Nome = "VeiculoAtualizado";
+		veiculo.Marca = "MarcaAtualizada";
+		veiculo.Ano = 2025;
+
+		// Act
+		// var v
+		var veiculoAtualizado = await _servico.UpdateVeiculo(veiculo);
+
+		// Assert
+		Assert.IsNotNull(veiculoAtualizado);
+		Assert.AreEqual(veiculo.Nome, veiculoAtualizado.Nome);
+		Assert.AreEqual(veiculo.Marca, veiculoAtualizado.Marca);
+		Assert.AreEqual(veiculo.Ano, veiculoAtualizado.Ano);
+	}
+
+	[TestMethod]
+	public async Task TestUpdateVeiculo_Falha()
+	{
+		// Arrange
+		await AddVeiculo(1);
+
+		var veiculo = await _servico.GetVeiculoById(2); // ID que não existe
+
+		// Assert
+		Assert.IsNull(veiculo);
+
+		// Act & Assert
+		await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+		{
+			await _servico.UpdateVeiculo(veiculo!);
+		});
 	}
 
 #region Métodos auxiliares
