@@ -84,22 +84,37 @@ builder.Services.AddSwaggerGen(
 builder.Services.AddScoped<IAdministradorServico, AdministradorServico>();
 builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
 
-builder.Services.AddDbContext<DbContexto>(
-	options =>
-	{
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-		string sql = builder.Configuration.GetConnectionString("mysql");
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+var environment = builder.Environment.EnvironmentName;
+if (environment == "Testing")
+{
+	builder.Services.AddDbContext<DbContexto>(
+		options =>
+		{
+			options.UseSqlite("DataSource=:memory:");
+		}
+	);
+}
+else
+{
+	// Configurar DbContexto para MySQL
+	builder.Services.AddDbContext<DbContexto>(
+		options =>
+		{
+			var sql = builder.Configuration.GetConnectionString("mysql");
 
-#pragma warning disable CS8604 // Possible null reference argument.
-		_ = options.UseMySql(
-			builder.Configuration.GetConnectionString(sql),
+			if (string.IsNullOrEmpty(sql))
+				throw new InvalidOperationException("String mysql não configurada");
 
-			ServerVersion.AutoDetect(sql)
-		);
-#pragma warning restore CS8604 // Possible null reference argument.
-	}
-);
+			// Pass the actual connection string value (sql) to UseMySql.
+			options.UseMySql(
+				sql,
+				ServerVersion.AutoDetect(sql)
+			);
+		}
+	);
+}
+
+
 
 var app = builder.Build();
 
@@ -247,7 +262,7 @@ app.MapGet("/veiculos",
 	async (IVeiculoServico servico, [FromQuery] int pagina = 1) =>
 	{
 		var result = await servico.GetVeiculos(pagina);
-		return result;
+		return Results.Ok(result);
 	}
 )
 .RequireAuthorization(new AuthorizeAttribute() { Roles = $"{Perfil.adm},{Perfil.editor}" })
