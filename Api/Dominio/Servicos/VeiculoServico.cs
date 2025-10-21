@@ -23,7 +23,7 @@ public class VeiculoServico(DbContexto db) : IVeiculoServico
 		return v;
 	}
 
-	public async Task<IResult> GetVeiculos(int pagina, string? nome = null, string? marca = null)
+	public async Task<List<Veiculo>> GetVeiculos(int pagina, string? nome = null, string? marca = null)
 	{
 		int itensPorPagina = 10;
 
@@ -35,7 +35,8 @@ public class VeiculoServico(DbContexto db) : IVeiculoServico
 		veiculos = veiculos.Skip(itensPorPagina * (pagina - 1)).Take(itensPorPagina);
 
 		var v = await veiculos.ToListAsync();
-		return Results.Ok(v);
+		return v;
+		// return Results.Ok(v);
 	}
 
 	public async Task<IResult> InsertVeiculo(Veiculo veiculo)

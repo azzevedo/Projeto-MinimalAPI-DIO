@@ -262,7 +262,7 @@ app.MapGet("/veiculos",
 	async (IVeiculoServico servico, [FromQuery] int pagina = 1) =>
 	{
 		var result = await servico.GetVeiculos(pagina);
-		return result;
+		return Results.Ok(result);
 	}
 )
 .RequireAuthorization(new AuthorizeAttribute() { Roles = $"{Perfil.adm},{Perfil.editor}" })
