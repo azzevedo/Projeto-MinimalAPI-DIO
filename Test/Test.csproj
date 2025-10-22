@@ -5,15 +5,19 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ShadowCopyReferences>false</ShadowCopyReferences>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.10" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageReference Include="MSTest" Version="3.6.4" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.4" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageReference Include="MSTest" Version="4.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.0.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,5 +27,19 @@
   <ItemGroup>
     <ProjectReference Include="..\Api\minimal-api.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyTestHostDeps" AfterTargets="Build">
+    <ItemGroup>
+      <!-- copy testhost.deps.json / testhost.runtimeconfig.json from NuGet package cache -->
+      <TestHostDeps Include="$(NuGetPackageRoot)microsoft.visualstudio.testplatform.testhost\**\testhost.deps.json" />
+      <TestHostRuntime Include="$(NuGetPackageRoot)microsoft.visualstudio.testplatform.testhost\**\testhost.runtimeconfig.json" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(TestHostDeps);@(TestHostRuntime)"
+      DestinationFolder="$(OutputPath)"
+      SkipUnchangedFiles="true"
+      Condition="@(TestHostDeps) != '' Or @(TestHostRuntime) != ''" />
+  </Target>
 
 </Project>

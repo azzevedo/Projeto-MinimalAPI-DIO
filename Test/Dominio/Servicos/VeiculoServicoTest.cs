@@ -97,7 +97,8 @@ public class VeiculoServicoTest : TestBase
 		Assert.IsNull(veiculo);
 
 		// Act & Assert
-		await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+		// await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () =>
+		await Assert.ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
 			await _servico.UpdateVeiculo(veiculo!);
 		});
@@ -139,9 +140,12 @@ public class VeiculoServicoTest : TestBase
 		Assert.IsNotNull(resultPage2);
 		Assert.IsNotNull(resultPage3);
 
-		Assert.AreEqual(10, resultPage1.Count); // Página 1 deve ter 10 itens
-		Assert.AreEqual(10, resultPage2.Count); // Página 2 deve ter 10 itens
-		Assert.AreEqual(5, resultPage3.Count);  // Página 3 deve ter 5 itens
+		// Assert.AreEqual(10, resultPage1.Count); // Página 1 deve ter 10 itens
+		Assert.HasCount(10, resultPage1);
+		// Assert.AreEqual(10, resultPage2.Count); // Página 2 deve ter 10 itens
+		Assert.HasCount(10, resultPage2);
+		// Assert.AreEqual(5, resultPage3.Count);  // Página 3 deve ter 5 itens
+		Assert.HasCount(5, resultPage3);
 
 		// Verifica se os veículos retornados são os esperados
 		Assert.AreEqual("Veiculo1", resultPage1[0].Nome);
@@ -161,9 +165,11 @@ public class VeiculoServicoTest : TestBase
 
 		// Assert
 		Assert.IsNotNull(resultPage1);
-		Assert.AreEqual(5, resultPage1.Count); // Deve retornar os 5 veículos
+		// Assert.AreEqual(5, resultPage1.Count); // Deve retornar os 5 veículos
+		Assert.HasCount(5, resultPage1); // Deve retornar os 5 veículos
 		Assert.IsNotNull(resultPage2);
-		Assert.AreEqual(0, resultPage2.Count); // Página 2 deve estar vazia
+		// Assert.AreEqual(0, resultPage2.Count); // Página 2 deve estar vazia
+		Assert.HasCount(0, resultPage2); // Deve retornar os 5 veículos
 	}
 
 #region Métodos auxiliares

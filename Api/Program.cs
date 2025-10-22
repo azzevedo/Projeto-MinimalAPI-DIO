@@ -84,21 +84,14 @@ builder.Services.AddSwaggerGen(
 builder.Services.AddScoped<IAdministradorServico, AdministradorServico>();
 builder.Services.AddScoped<IVeiculoServico, VeiculoServico>();
 
-var environment = builder.Environment.EnvironmentName;
-if (environment == "Testing")
-{
-	builder.Services.AddDbContext<DbContexto>(
-		options =>
-		{
+builder.Services.AddDbContext<DbContexto>(
+	options =>
+	{
+		var environment = builder.Environment.EnvironmentName;
+
+		if (environment == "Testing")
 			options.UseSqlite("DataSource=:memory:");
-		}
-	);
-}
-else
-{
-	// Configurar DbContexto para MySQL
-	builder.Services.AddDbContext<DbContexto>(
-		options =>
+		else
 		{
 			var sql = builder.Configuration.GetConnectionString("mysql");
 
@@ -111,8 +104,8 @@ else
 				ServerVersion.AutoDetect(sql)
 			);
 		}
-	);
-}
+	}
+);
 
 
 
