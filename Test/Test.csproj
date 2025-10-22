@@ -18,28 +18,13 @@
     <PackageReference Include="MSTest" Version="4.0.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.0.1" />
     <PackageReference Include="MSTest.TestFramework" Version="4.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Api\minimal-api.csproj" />
   </ItemGroup>
-
-  <Target Name="CopyTestHostDeps" AfterTargets="Build">
-    <ItemGroup>
-      <!-- copy testhost.deps.json / testhost.runtimeconfig.json from NuGet package cache -->
-      <TestHostDeps Include="$(NuGetPackageRoot)microsoft.visualstudio.testplatform.testhost\**\testhost.deps.json" />
-      <TestHostRuntime Include="$(NuGetPackageRoot)microsoft.visualstudio.testplatform.testhost\**\testhost.runtimeconfig.json" />
-    </ItemGroup>
-
-    <Copy
-      SourceFiles="@(TestHostDeps);@(TestHostRuntime)"
-      DestinationFolder="$(OutputPath)"
-      SkipUnchangedFiles="true"
-      Condition="@(TestHostDeps) != '' Or @(TestHostRuntime) != ''" />
-  </Target>
-
 </Project>

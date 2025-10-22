@@ -4,7 +4,6 @@ using minimal_api.Dominio.Enum;
 
 namespace Test.Requests;
 
-[TestClass]
 public class EndpointAdministradorTest
 {
 	private CustomWebApplicationFactory _factory = default!;
@@ -16,7 +15,6 @@ public class EndpointAdministradorTest
 		_client = _factory.CreateClient();
 	}
 
-	[TestCleanup]
 	public void Cleanup()
 	{
 		_client.Dispose();
@@ -25,7 +23,6 @@ public class EndpointAdministradorTest
 
 
 
-	[TestMethod]
 	public async Task TestCriarAdministradorEFazerLogin()
 	{
 		// Arrange
@@ -40,7 +37,6 @@ public class EndpointAdministradorTest
 		Assert.IsTrue(response.IsSuccessStatusCode, "Falha ao criar novo administrador");
 	}
 
-	[TestMethod]
 	public async Task Get_Administradores_ReturnsSuccessStatusCode()
 	{
 		// Arrange
