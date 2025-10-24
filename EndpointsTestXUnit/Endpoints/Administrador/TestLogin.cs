@@ -9,9 +9,11 @@ public class TestLogin : ApiTestBase
 {
 #region Sucesso
 	[Theory]
-	[InlineData("mamonas@assassinas.com", "1406")]
 	[InlineData("adm@teste.com", "1234asdf")]
-	[InlineData("vira@vira.com", "asdf1234")]
+	[InlineData("mamonas@assassinas.com", "1406")]
+	[InlineData("mundo@animal.com", "dornascostas")]
+	[InlineData("vira@vira.com", "monoteta")]
+	[InlineData("lavem@alemao.com", "facade2legumes")]
 	public async Task Test_Login(string email, string senha)
 	{
 		var adm = new AdministradorDTO { Email = email, Senha = senha };
