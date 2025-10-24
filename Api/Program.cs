@@ -366,3 +366,5 @@ app.UseAuthorization();
 #endregion
 
 app.Run();
+
+public partial class Program;
