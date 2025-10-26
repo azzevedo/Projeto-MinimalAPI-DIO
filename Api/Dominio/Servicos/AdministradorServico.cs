@@ -66,4 +66,17 @@ public class AdministradorServico(DbContexto db) : IAdministradorServico
 		Administrador? adm = await _db.Administradores.FindAsync(id);
 		return adm;
 	}
+
+	public async Task DeleteAdministrador(Administrador adm)
+	{
+		_db.Administradores.Remove(adm);
+		await _db.SaveChangesAsync();
+	}
+
+	public async Task<Administrador> UpdateAdministrador(Administrador adm)
+	{
+		_db.Administradores.Update(adm);
+		await _db.SaveChangesAsync();
+		return adm;
+	}
 }
