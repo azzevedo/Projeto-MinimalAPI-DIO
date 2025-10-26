@@ -1,10 +1,10 @@
 using System.Net;
-using System.Net.Http.Headers;
 using EndpointsTestXUnit.Helpers;
+using Xunit.Abstractions;
 
 namespace EndpointsTestXUnit.Endpoints.Administrador;
 
-public class TestGetAdministradoresById : ApiTestBase, IUserLogger
+public class TestGetAdministradoresById(ITestOutputHelper output) : ApiTestBase, IUserLogger
 {
 	/* [x] SUCESSO */
 	// Fazer login autenticado - adm
@@ -37,17 +37,17 @@ public class TestGetAdministradoresById : ApiTestBase, IUserLogger
 	}
 
 	[Theory]
-	[InlineData("mamonas@assassinas.com", "1406")]
-	[InlineData("mundo@animal.com", "dornascostas")]
-	[InlineData("adm@teste.com", "1234asdf")]
-	public async Task Test_GetAdminsById_OK_NotFound(string email, string senha)
+	[InlineData("mamonas@assassinas.com", "1406", 2)]
+	[InlineData("mundo@animal.com", "dornascostas", 3)]
+	[InlineData("adm@teste.com", "1234asdf", 5)]
+	public async Task Test_GetAdminsById_OK_NotFound(string email, string senha, int id)
 	{
 		await Autenticar(email, senha);
-		var resp = await client.GetAsync("/admins/5"); // Pegar user com id 5 (existente)
+		var resp = await client.GetAsync($"/admins/{id}"); // Pegar user com ids variados (existentes)
 		Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
 
 		string str = await resp.Content.ReadAsStringAsync();
-		Console.WriteLine(str);
+		output.WriteLine(str);
 
 		// NOT FOUND
 		resp = await client.GetAsync("/admins/42"); // não existe
