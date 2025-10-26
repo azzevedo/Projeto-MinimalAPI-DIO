@@ -204,6 +204,43 @@ app.MapGet("/admins",
 .RequireAuthorization(new AuthorizeAttribute() { Roles = $"{Perfil.adm}" })
 .WithTags("ADM");
 
+app.MapDelete("/admins/{id}",
+	async ([FromRoute] int id, IAdministradorServico servico) =>
+	{
+		Administrador? adm = await servico.GetAdministradorByIdAsync(id);
+		if (adm is null)
+			return Results.NotFound($"ID: [{id}] não existe!");
+
+		await servico.DeleteAdministrador(adm);
+		return Results.Ok($"{adm.Id} == {adm.Perfil} deletado!");
+	}
+)
+.RequireAuthorization(new AuthorizeAttribute() { Roles	= $"{Perfil.adm}"})
+.WithTags("ADM");
+
+app.MapPut("/admins{id}",
+	async ([FromRoute] int id, AdministradorDTO admDTO, IAdministradorServico servico) =>
+	{
+		Administrador? adm = await servico.GetAdministradorByIdAsync(id);
+
+		if (adm is null)
+			return Results.NotFound($"ID: [{id}] não existe!");
+
+		var validacao = ValidateAdmDTO(admDTO);
+		if (validacao.Messages.Count > 0)
+			return Results.BadRequest(validacao);
+
+		adm.Email = admDTO.Email;
+		adm.Senha = admDTO.Senha;
+		adm.Perfil = $"{admDTO.Perfil}";
+
+		var result = await servico.UpdateAdministrador(adm);
+		return Results.Created("Altualizado!", adm);
+	}
+)
+.RequireAuthorization(new AuthorizeAttribute() { Roles = $"{Perfil.adm}" })
+.WithTags("ADM");
+
 
 app.MapGet("/admins/{id}",
 	async ([FromRoute] int id, IAdministradorServico servico) =>
@@ -307,7 +344,7 @@ app.MapDelete("/veiculos/{id}",
 		Veiculo? v = await servico.GetVeiculoById(id);
 		if (v is null)
 		{
-			return Results.NotFound($"O ID [{id} não existe]");
+			return Results.NotFound($"O ID [{id} não existe");
 		}
 
 		await servico.DeleteVeiculo(v);
@@ -335,6 +372,22 @@ static ValidationError ValidateDTO(VeiculoDTO veiculoDTO)
 	{
 		validacao.Messages.Add($"Somente veículo a partir de 1960");
 	}
+
+	return validacao;
+}
+
+static ValidationError ValidateAdmDTO(AdministradorDTO admDTO)
+{
+	ValidationError validacao = new();
+
+	var perfil = Enum.Parse<Perfil>(admDTO.Perfil.ToString());
+
+	if (string.IsNullOrEmpty(admDTO.Email))
+		validacao.Messages.Add($"Informe o email");
+	if (string.IsNullOrEmpty(admDTO.Senha))
+		validacao.Messages.Add($"Informe a senha");
+	if (! Enum.IsDefined(perfil))
+		validacao.Messages.Add($"Perfil inválido");
 
 	return validacao;
 }
