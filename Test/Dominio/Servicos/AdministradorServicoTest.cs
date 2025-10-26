@@ -219,6 +219,47 @@ public class AdministradorServicoTest : TestBase
 		_context.SaveChanges();
 	}
 
+	[TestMethod]
+	public async Task TestPutAdministradorPorID()
+	{
+		var adm = await _servico.GetAdministradorByIdAsync(3); // não existe
+		Assert.IsNotNull(adm);
+
+		Assert.AreEqual("master@teste.com", adm.Email);
+		Assert.AreEqual("1234asdf", adm.Senha);
+		Assert.AreEqual("editor", adm.Perfil);
+
+		adm.Email = "cabeca@bagre.com";
+		adm.Senha = "123456asdfjklç";
+		adm.Perfil = "adm";
+
+		Assert.AreEqual("cabeca@bagre.com", adm.Email);
+		Assert.AreEqual("123456asdfjklç", adm.Senha);
+		Assert.AreEqual("adm", adm.Perfil);
+	}
+
+	[TestMethod]
+	public async Task TestDeleteAdministradorPorID()
+	{
+		// Adm não existe no banco de dados
+		var adm = await _servico.GetAdministradorByIdAsync(21);
+		Assert.IsNull(adm);
+
+		// Adm existente no banco de dados
+		adm = await _servico.GetAdministradorByIdAsync(1);
+		Assert.IsNotNull(adm);
+
+		Console.WriteLine($"{adm.Email}");
+
+		await _servico.DeleteAdministrador(adm);
+
+		// REMOVIDO
+		adm = await _servico.GetAdministradorByIdAsync(1);
+		Assert.IsNull(adm);
+
+		Assert.HasCount(3, _context.Administradores);
+	}
+
 	[TestCleanup]
 	public async Task Cleanup()
 	{
