@@ -218,7 +218,7 @@ app.MapDelete("/admins/{id}",
 .RequireAuthorization(new AuthorizeAttribute() { Roles	= $"{Perfil.adm}"})
 .WithTags("ADM");
 
-app.MapPut("/admins{id}",
+app.MapPut("/admins/{id}",
 	async ([FromRoute] int id, AdministradorDTO admDTO, IAdministradorServico servico) =>
 	{
 		Administrador? adm = await servico.GetAdministradorByIdAsync(id);
@@ -380,13 +380,13 @@ static ValidationError ValidateAdmDTO(AdministradorDTO admDTO)
 {
 	ValidationError validacao = new();
 
-	var perfil = Enum.Parse<Perfil>(admDTO.Perfil.ToString());
+	// var perfil = Enum.Parse<Perfil>(admDTO.Perfil.ToString());
 
 	if (string.IsNullOrEmpty(admDTO.Email))
 		validacao.Messages.Add($"Informe o email");
 	if (string.IsNullOrEmpty(admDTO.Senha))
 		validacao.Messages.Add($"Informe a senha");
-	if (! Enum.IsDefined(perfil))
+	if (! Enum.IsDefined(admDTO.Perfil))
 		validacao.Messages.Add($"Perfil inválido");
 
 	return validacao;
