@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using EndpointsTestXUnit.Helpers;
 using minimal_api.Dominio.DTO;
+using minimal_api.Dominio.Entidades;
 using minimal_api.Dominio.Enum;
 using Xunit.Abstractions;
 
@@ -64,23 +65,27 @@ public class TestPutAdministrador(ITestOutputHelper output) : ApiTestBase
 		output.WriteLine($"{content}");
 	}
 
-	// [Theory]
-	// [InlineData("mamonas@assassinas.com", "1406", 2)]
-	// [InlineData("mundo@animal.com", "dornascostas", 3)]
-	// [InlineData("adm@teste.com", "1234asdf", 5)]
-	// public async Task Put_Adm_OK(string email, string senha, int id)
-	// {
-	// 	await Autenticar(email, senha);
-	// 	var servico = new AdministradorServico(db);
-	// 	var adm = await servico.GetAdministradorByIdAsync(id);
-	// 	Assert.Equal()
+	[Theory]
+	[InlineData("mamonas@assassinas.com", "1406", 2)]
+	[InlineData("mundo@animal.com", "dornascostas", 3)]
+	[InlineData("adm@teste.com", "1234asdf", 5)]
+	public async Task Put_Adm_Created(string email, string senha, int id)
+	{
+		await Autenticar(email, senha);
 
-	// 	var admUpdate = new AdministradorDTO { Email = "chopis@centis.com", Senha = "gergelim" };
+		var admUpdate = new AdministradorDTO { Email = "chopis@centis.com", Senha = "gergelim" };
 
-	// 	// var resp = await client.PutAsJsonAsync($"/admins/{id}", adm);
+		var resp = await client.PutAsJsonAsync($"/admins/{id}", admUpdate);
 
-	// 	// Assert.Equal(HttpStatusCode.OK, resp.StatusCode);
-	// }
+		Assert.Equal(HttpStatusCode.Created, resp.StatusCode);
+
+		var adm = await resp.Content.ReadFromJsonAsync<Administrador>();
+		Assert.NotNull(adm);
+		Assert.Equal(admUpdate.Email, adm.Email);
+		Assert.Equal(admUpdate.Senha, adm.Senha);
+		Assert.Equal(admUpdate.Perfil.ToString(), adm.Perfil);
+	}
+
 	[Theory]
 	[InlineData("mamonas@assassinas.com", "1406", 88)]
 	[InlineData("mundo@animal.com", "dornascostas", 55)]
@@ -91,11 +96,4 @@ public class TestPutAdministrador(ITestOutputHelper output) : ApiTestBase
 		var resp = await client.PutAsJsonAsync($"/admins/{id}", new AdministradorDTO());
 		Assert.Equal(HttpStatusCode.NotFound, resp.StatusCode);
 	}
-
-	// async Task Autenticar(string email, string senha)
-	// {
-	// 	// var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-	// 	// client.DefaultRequestHeaders.Authorization = auth;
-	// 	await IUserLogger.Autenticar(client, email, senha);
-	// }
 }
