@@ -132,7 +132,8 @@ public class AdministradorServicoTest : TestBase
 		bool valido = _servico.IsValidLogin(login, out Administrador admLogado);
 
 		// Assert
-		Assert.IsTrue(cadastrados > 0); // 4 já existem pelos dados pré-carregados
+		// Assert.IsTrue(cadastrados > 0); // 4 já existem pelos dados pré-carregados
+		Assert.IsGreaterThan(0, cadastrados); // 4 já existem pelos dados pré-carregados
 
 		Assert.IsTrue(valido);
 		Assert.AreEqual(adm.Email, admLogado.Email);
@@ -175,11 +176,14 @@ public class AdministradorServicoTest : TestBase
 
 		// Assert
 		Assert.IsNotNull(admsPagina1);
-		Assert.IsTrue(admsPagina1.Count > 0); // Deve ter 4 admins na página 1
-		Assert.AreEqual(4, admsPagina1.Count);
+		// Assert.IsTrue(admsPagina1.Count > 0); // Deve ter 4 admins na página 1
+		Assert.IsNotEmpty(admsPagina1); // Deve ter 4 admins na página 1
+		// Assert.AreEqual(4, admsPagina1.Count);
+		Assert.HasCount(4, admsPagina1);
 
 		Assert.IsNotNull(admsPagina2);
-		Assert.AreEqual(0, admsPagina2.Count); // Não deve ter admins na página 2 (só 4 cadastrados)
+		// Assert.AreEqual(0, admsPagina2.Count); // Não deve ter admins na página 2 (só 4 cadastrados)
+		Assert.HasCount(0, admsPagina2); // Não deve ter admins na página 2 (só 4 cadastrados)
 
 		// Act2 Adicionar mais administradores para teste de paginação
 		AddAdministradoresParaTesteDePaginacao();
@@ -189,11 +193,14 @@ public class AdministradorServicoTest : TestBase
 
 		// Assert2
 		Assert.IsNotNull(admsPagina1AposInclusao);
-		Assert.AreEqual(10, admsPagina1AposInclusao.Count); // Deve ter 10 admins na página 1
+		// Assert.AreEqual(10, admsPagina1AposInclusao.Count); // Deve ter 10 admins na página 1
+		Assert.HasCount(10, admsPagina1AposInclusao); // Deve ter 10 admins na página 1
 		Assert.IsNotNull(admsPagina2AposInclusao);
-		Assert.AreEqual(7, admsPagina2AposInclusao.Count); // Deve ter 7 admins na página 2
+		// Assert.AreEqual(7, admsPagina2AposInclusao.Count); // Deve ter 7 admins na página 2
+		Assert.HasCount(7, admsPagina2AposInclusao); // Deve ter 7 admins na página 2
 		Assert.IsNotNull(admsPagina3AposInclusao);
-		Assert.AreEqual(0, admsPagina3AposInclusao.Count); // Não deve ter admins na página 3
+		// Assert.AreEqual(0, admsPagina3AposInclusao.Count); // Não deve ter admins na página 3
+		Assert.HasCount(0, admsPagina3AposInclusao); // Não deve ter admins na página 3
 	}
 
 	public void AddAdministradoresParaTesteDePaginacao()
@@ -210,6 +217,47 @@ public class AdministradorServicoTest : TestBase
 		}
 
 		_context.SaveChanges();
+	}
+
+	[TestMethod]
+	public async Task TestPutAdministradorPorID()
+	{
+		var adm = await _servico.GetAdministradorByIdAsync(3); // não existe
+		Assert.IsNotNull(adm);
+
+		Assert.AreEqual("master@teste.com", adm.Email);
+		Assert.AreEqual("1234asdf", adm.Senha);
+		Assert.AreEqual("editor", adm.Perfil);
+
+		adm.Email = "cabeca@bagre.com";
+		adm.Senha = "123456asdfjklç";
+		adm.Perfil = "adm";
+
+		Assert.AreEqual("cabeca@bagre.com", adm.Email);
+		Assert.AreEqual("123456asdfjklç", adm.Senha);
+		Assert.AreEqual("adm", adm.Perfil);
+	}
+
+	[TestMethod]
+	public async Task TestDeleteAdministradorPorID()
+	{
+		// Adm não existe no banco de dados
+		var adm = await _servico.GetAdministradorByIdAsync(21);
+		Assert.IsNull(adm);
+
+		// Adm existente no banco de dados
+		adm = await _servico.GetAdministradorByIdAsync(1);
+		Assert.IsNotNull(adm);
+
+		Console.WriteLine($"{adm.Email}");
+
+		await _servico.DeleteAdministrador(adm);
+
+		// REMOVIDO
+		adm = await _servico.GetAdministradorByIdAsync(1);
+		Assert.IsNull(adm);
+
+		Assert.HasCount(3, _context.Administradores);
 	}
 
 	[TestCleanup]

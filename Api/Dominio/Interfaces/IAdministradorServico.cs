@@ -14,4 +14,6 @@ public interface IAdministradorServico
 	Task Incluir(Administrador adm);
 	Task<List<Administrador>> GetAdministradores(int pagina);
 	Task<Administrador?> GetAdministradorByIdAsync(int id);
+	Task DeleteAdministrador(Administrador adm);
+	Task<Administrador> UpdateAdministrador(Administrador adm);
 }

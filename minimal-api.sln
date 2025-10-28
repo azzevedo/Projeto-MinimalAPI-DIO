@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal-api", "Api/minimal-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{9C02C7A2-F922-448B-ACDB-26C72C37BEA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndpointsTestXUnit", "EndpointsTestXUnit\EndpointsTestXUnit.csproj", "{D9B8BACD-A588-4215-B5C9-671DB407A16A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{9C02C7A2-F922-448B-ACDB-26C72C37BEA5}.Release|x64.Build.0 = Release|Any CPU
 		{9C02C7A2-F922-448B-ACDB-26C72C37BEA5}.Release|x86.ActiveCfg = Release|Any CPU
 		{9C02C7A2-F922-448B-ACDB-26C72C37BEA5}.Release|x86.Build.0 = Release|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Debug|x64.Build.0 = Debug|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Release|x64.ActiveCfg = Release|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Release|x64.Build.0 = Release|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D9B8BACD-A588-4215-B5C9-671DB407A16A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
