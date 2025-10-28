@@ -81,6 +81,16 @@ public abstract class ApiTestBase : IAsyncLifetime
 		};
 
 		await db.Administradores.AddRangeAsync(adms);
+
+		var veiculos = new List<Veiculo>
+		{
+			new() { Nome = "Brasília", Marca = "vw", Ano = 1995 },
+			new() { Nome = "Fusca", Marca = "vw", Ano = 1969 },
+			new() { Nome = "Uno", Marca = "fiat", Ano = 2000 }
+		};
+
+		await db.Veiculos.AddRangeAsync(veiculos);
+
 		await db.SaveChangesAsync();
 	}
 

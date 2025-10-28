@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using EndpointsTestXUnit.Helpers;
 using minimal_api.Dominio.ModelViews;
 
-namespace EndpointsTestXUnit.Endpoints.Administrador;
+namespace EndpointsTestXUnit.Endpoints.Administradores;
 
 public class TestGetAdministradores : ApiTestBase, IUserLogger
 {

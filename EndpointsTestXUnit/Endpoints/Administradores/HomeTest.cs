@@ -1,7 +1,7 @@
 using System.Net;
 using EndpointsTestXUnit.Helpers;
 
-namespace EndpointsTestXUnit.Endpoints.Administrador;
+namespace EndpointsTestXUnit.Endpoints.Administradores;
 
 public class HomeTest : ApiTestBase
 {

@@ -1,9 +1,7 @@
 using System.Net;
-using System.Net.Http.Json;
 using EndpointsTestXUnit.Helpers;
-using minimal_api.Dominio.DTO;
 
-namespace EndpointsTestXUnit.Endpoints.Administrador;
+namespace EndpointsTestXUnit.Endpoints.Administradores;
 
 public class TestDeleteAdministradorById : ApiTestBase, IUserLogger
 {

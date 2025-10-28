@@ -4,9 +4,8 @@ using System.Net.Http.Json;
 using EndpointsTestXUnit.Helpers;
 using minimal_api.Dominio.DTO;
 using minimal_api.Dominio.Enum;
-using Xunit.Abstractions;
 
-namespace EndpointsTestXUnit.Endpoints.Administrador;
+namespace EndpointsTestXUnit.Endpoints.Administradores;
 
 public class TestPostAdministrador : ApiTestBase, IUserLogger
 {

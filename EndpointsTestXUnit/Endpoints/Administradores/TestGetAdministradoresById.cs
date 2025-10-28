@@ -2,7 +2,7 @@ using System.Net;
 using EndpointsTestXUnit.Helpers;
 using Xunit.Abstractions;
 
-namespace EndpointsTestXUnit.Endpoints.Administrador;
+namespace EndpointsTestXUnit.Endpoints.Administradores;
 
 public class TestGetAdministradoresById(ITestOutputHelper output) : ApiTestBase, IUserLogger
 {
