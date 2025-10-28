@@ -3,7 +3,7 @@ using EndpointsTestXUnit.Helpers;
 
 namespace EndpointsTestXUnit.Endpoints.Administradores;
 
-public class TestDeleteAdministradorById : ApiTestBase, IUserLogger
+public class TestDeleteAdministradorById : ApiTestBase
 {
 	/*
 	[x] Editor - FORBIDDEN
@@ -61,9 +61,10 @@ public class TestDeleteAdministradorById : ApiTestBase, IUserLogger
 	}
 
 	
-	async Task Autenticar(string email, string senha)
-	{
-		var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-		client.DefaultRequestHeaders.Authorization = auth;
-	}
+	// async Task Autenticar(string email, string senha)
+	// {
+	// 	// var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
+	// 	// client.DefaultRequestHeaders.Authorization = auth;
+	// 	await IUserLogger.Autenticar(client, email, senha);
+	// }
 }

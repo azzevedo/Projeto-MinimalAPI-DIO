@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace EndpointsTestXUnit.Endpoints.Administradores;
 
-public class TestGetAdministradoresById(ITestOutputHelper output) : ApiTestBase, IUserLogger
+public class TestGetAdministradoresById(ITestOutputHelper output) : ApiTestBase
 {
 	/* [x] SUCESSO */
 	// Fazer login autenticado - adm
@@ -54,10 +54,11 @@ public class TestGetAdministradoresById(ITestOutputHelper output) : ApiTestBase,
 		Assert.Equal(HttpStatusCode.NotFound, resp.StatusCode);
 	}
 
-	async Task Autenticar(string email, string senha)
-	{
-		var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-		client.DefaultRequestHeaders.Authorization = auth;
-	}
+	// async Task Autenticar(string email, string senha)
+	// {
+	// 	// var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
+	// 	// client.DefaultRequestHeaders.Authorization = auth;
+	// 	await IUserLogger.Autenticar(client, email, senha);
+	// }
 }
 

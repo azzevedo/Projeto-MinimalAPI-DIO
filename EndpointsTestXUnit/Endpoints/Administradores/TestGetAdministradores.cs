@@ -5,7 +5,7 @@ using minimal_api.Dominio.ModelViews;
 
 namespace EndpointsTestXUnit.Endpoints.Administradores;
 
-public class TestGetAdministradores : ApiTestBase, IUserLogger
+public class TestGetAdministradores : ApiTestBase
 {
 	[Fact]
 	public async Task Test_GetAdmins_SemAutenticacao_Unauthorized()
@@ -93,8 +93,9 @@ public class TestGetAdministradores : ApiTestBase, IUserLogger
 
 		// client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", admLogado.Token);
 		*/
-		var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-		client.DefaultRequestHeaders.Authorization = auth;
+		// var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
+		// client.DefaultRequestHeaders.Authorization = auth;
+		await Autenticar(email, senha);
 
 		var resp = await client.GetAsync("/admins");
 		return resp;

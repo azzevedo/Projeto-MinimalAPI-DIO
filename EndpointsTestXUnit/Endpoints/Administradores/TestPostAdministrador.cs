@@ -7,7 +7,7 @@ using minimal_api.Dominio.Enum;
 
 namespace EndpointsTestXUnit.Endpoints.Administradores;
 
-public class TestPostAdministrador : ApiTestBase, IUserLogger
+public class TestPostAdministrador : ApiTestBase
 {
 	/*
 	[x] - [UNAUTHORIZED]
@@ -39,7 +39,7 @@ public class TestPostAdministrador : ApiTestBase, IUserLogger
 	[InlineData("lavem@alemao.com", "facade2legumes")]
 	public async Task TestPost_Editor(string email, string senha)
 	{
-		var auth = await Logar(email, senha);
+		// var auth = await Logar(email, senha);
 
 		var criarNovoAdm = new AdministradorDTO { Email = "criarnovoadm@semautenicacao.com", Senha = "123456", Perfil = Perfil.adm };
 		var criarNovoEditor = new AdministradorDTO { Email = "criarnovoeditor@semautenicacao.com", Senha = "123456", Perfil = Perfil.editor };
@@ -52,7 +52,8 @@ public class TestPostAdministrador : ApiTestBase, IUserLogger
 		Assert.Equal(HttpStatusCode.Unauthorized, respNovoEditor.StatusCode);
 
 		/* Com autenticação */
-		client.DefaultRequestHeaders.Authorization = auth;
+		// client.DefaultRequestHeaders.Authorization = auth;
+		await Autenticar(email, senha);
 		respNovoAdm = await client.PostAsJsonAsync(endpoint, criarNovoAdm);
 		respNovoEditor = await client.PostAsJsonAsync(endpoint, criarNovoEditor);
 
@@ -66,7 +67,7 @@ public class TestPostAdministrador : ApiTestBase, IUserLogger
 	[InlineData("adm@teste.com", "1234asdf")]
 	public async Task TestPost_ADM(string email, string senha)
 	{
-		var auth = await Logar(email, senha);
+		// var auth = await Logar(email, senha);
 
 		/* SEM AUTENTICAÇÂO */
 		var criarNovoAdm = new AdministradorDTO { Email = "criarnovoadm@semautenicacao.com", Senha = "123456", Perfil = Perfil.adm };
@@ -80,7 +81,8 @@ public class TestPostAdministrador : ApiTestBase, IUserLogger
 
 
 		/* COM AUTENTICAÇÃO */
-		client.DefaultRequestHeaders.Authorization = auth;
+		// client.DefaultRequestHeaders.Authorization = auth;
+		await Autenticar(email, senha);
 		respNovoAdm = await client.PostAsJsonAsync(endpoint, criarNovoAdm);
 		respNovoEditor = await client.PostAsJsonAsync(endpoint, criarNovoEditor);
 
@@ -100,9 +102,11 @@ public class TestPostAdministrador : ApiTestBase, IUserLogger
 	}
 
 	/* Método parecido com o de TestGetAdministrador - melhor refatorar depois */
-	async Task<AuthenticationHeaderValue> Logar(string email, string senha)
-	{
-		var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-		return auth;
-	}
+	// async Task<AuthenticationHeaderValue> Logar(string email, string senha)
+	// async Task Autenticar(string email, string senha)
+	// {
+	// 	// var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
+	// 	// return auth;
+	// 	await IUserLogger.Autenticar(client, email, senha);
+	// }
 }

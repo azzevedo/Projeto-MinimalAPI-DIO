@@ -109,4 +109,9 @@ public abstract class ApiTestBase : IAsyncLifetime
 
 		await factory.DisposeAsync();
 	}
+
+	protected async Task Autenticar(string email, string senha)
+	{
+		await IUserLogger.Autenticar(client, email, senha);
+	}
 }

@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace EndpointsTestXUnit.Endpoints.Administradores;
 
-public class TestPutAdministrador(ITestOutputHelper output) : ApiTestBase, IUserLogger
+public class TestPutAdministrador(ITestOutputHelper output) : ApiTestBase
 {
 	/*
 	[x] Sem login -> UNAUTHORIZED
@@ -92,9 +92,10 @@ public class TestPutAdministrador(ITestOutputHelper output) : ApiTestBase, IUser
 		Assert.Equal(HttpStatusCode.NotFound, resp.StatusCode);
 	}
 
-	async Task Autenticar(string email, string senha)
-	{
-		var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-		client.DefaultRequestHeaders.Authorization = auth;
-	}
+	// async Task Autenticar(string email, string senha)
+	// {
+	// 	// var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
+	// 	// client.DefaultRequestHeaders.Authorization = auth;
+	// 	await IUserLogger.Autenticar(client, email, senha);
+	// }
 }

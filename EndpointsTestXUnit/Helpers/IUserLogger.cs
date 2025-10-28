@@ -20,7 +20,7 @@ public interface IUserLogger
 	/// <param name="senha"></param>
 	/// <returns>AuthenticationHeaderValue</returns>
 	/// <exception cref="InvalidOperationException"></exception>
-	public async Task<AuthenticationHeaderValue> DoLoginAndReturnAuthHeader(HttpClient client, string email, string senha)
+	private static async Task<AuthenticationHeaderValue> DoLoginAndReturnAuthHeader(HttpClient client, string email, string senha)
 	{
 		var dto = new AdministradorDTO { Email = email, Senha = senha };
 		var loginResponse = await client.PostAsJsonAsync("/adm/login", dto);
@@ -31,5 +31,11 @@ public interface IUserLogger
 			?? throw new InvalidOperationException("Sem token");
 
 		return new AuthenticationHeaderValue("Bearer", admLogado.Token);
+	}
+
+	/* Diminue (DRY) os códigos nas classes de testes */
+	public static async Task Autenticar(HttpClient client, string email, string senha)
+	{
+		client.DefaultRequestHeaders.Authorization = await DoLoginAndReturnAuthHeader(client, email, senha);
 	}
 }
