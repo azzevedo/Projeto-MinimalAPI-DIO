@@ -5,8 +5,10 @@ using minimal_api.Dominio.Entidades;
 
 namespace EndpointsTestXUnit.Endpoints.Veiculos;
 
-public class TestGetVeiculos : ApiTestBase, IUserLogger
+public class TestGetVeiculos : ApiTestBase
 {
+	readonly string endpoint = $"/veiculos?pagina=1";
+
 	[Theory]
 	[InlineData("mamonas@assassinas.com", "1406")]
 	[InlineData("mundo@animal.com", "dornascostas")]
@@ -15,7 +17,6 @@ public class TestGetVeiculos : ApiTestBase, IUserLogger
 	[InlineData("lavem@alemao.com", "facade2legumes")]
 	public async Task GetVeiculos(string email, string senha)
 	{
-		string endpoint = $"/veiculos?pagina=1";
 		await Autenticar(email, senha);
 
 		var resp = await client.GetAsync(endpoint);
@@ -26,9 +27,10 @@ public class TestGetVeiculos : ApiTestBase, IUserLogger
 		Assert.Equal(3, veiculos.Count); // Dados iniciais em ApiTestBase
 	}
 
-	async Task Autenticar(string email, string senha)
+	[Fact]
+	public async Task GetVeiculos_Unauthorized()
 	{
-		var auth = await ((IUserLogger)this).DoLoginAndReturnAuthHeader(client, email, senha);
-		client.DefaultRequestHeaders.Authorization = auth;
+		var resp = await client.GetAsync(endpoint);
+		Assert.Equal(HttpStatusCode.Unauthorized, resp.StatusCode);
 	}
 }
